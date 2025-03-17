@@ -1,0 +1,11 @@
+name: Main Tests
+#TODO: Verify and complete main tests yaml
+on: 
+   pull_request:
+    branches: [ main ] 
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+	 
+	 
