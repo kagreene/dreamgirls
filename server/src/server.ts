@@ -35,7 +35,7 @@ const startApolloServer = async () => {
   app.use(express.urlencoded({ extended: true }));
   app.use(express.json());
   
-  // Apply Apollo middleware with CORS
+  // Apply Apollo middleware with CORS //TODO: fix issue
   app.use(
     '/graphql',
     cors<cors.CorsRequest>(),
@@ -44,7 +44,7 @@ const startApolloServer = async () => {
       context: authMiddleware,
     })
   );
-  
+   
   // Serve static assets in production
   if (process.env.NODE_ENV === 'production') {
     app.use(express.static(path.join(__dirname, '../../client/dist')));
