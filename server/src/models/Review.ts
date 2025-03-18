@@ -1,7 +1,7 @@
 import { Schema, model } from 'mongoose';
 
-//create interface representing a reviews document
-interface IReviews {
+//create interface representing a review document
+interface IReview {
     title: string;
     description: string;
     reviewType: string;
@@ -25,7 +25,7 @@ interface IReviews {
 }
 
 //create schema corresponding to the document interface
-const reviewsSchema = new Schema<IReviews>(
+const reviewSchema = new Schema<IReview>(
     {
         title: {
             type: String,
@@ -47,6 +47,10 @@ const reviewsSchema = new Schema<IReviews>(
                 enum: ['Point'],
                 required: true,
             },
+            coordinates: {
+                type: [Number],
+                required: true,
+            },
             address: {
                 type: String,
             },
@@ -66,7 +70,7 @@ const reviewsSchema = new Schema<IReviews>(
             default: 0,
         },
         downvotes: {
-            types: Number,
+            type: Number,
             default: 0,
         },
         reviewedBy: {
@@ -102,14 +106,14 @@ const reviewsSchema = new Schema<IReviews>(
 );
 
 //create goespatial index for efficient location-based queries
-reviewsSchema.index({ location: '2dsphere' });
+reviewSchema.index({ location: '2dsphere' });
 
 //virtual for calculating upvote/downvote ratio
-reviewsSchema.virtual('voteRatio').get(function () {
+reviewSchema.virtual('voteRatio').get(function () {
     if (this.upvotes === 0 && this.downvotes === 0) return 0;
     return this.upvotes / (this.upvotes + this.downvotes);
 });
 
-//create and export Reviews model
-const Reviews = model<IReviews>('Reviews', reviewsSchema);
-export default Reviews;
+//create and export Reviewsmodel
+const Review = model<IReview>('Review', reviewSchema);
+export default Review;

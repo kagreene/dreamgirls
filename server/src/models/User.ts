@@ -33,7 +33,7 @@ const userSchema = new Schema<IUser>(
         reports: [
             {
                 type: Schema.Types.ObjectId,
-                ref: 'Reviews',
+                ref: 'Review',
             },
         ],
     },
