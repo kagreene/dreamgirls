@@ -11,13 +11,11 @@ interface TokenUser {
   email: string;
   _id: string;
 }
-
 // Context interface for Apollo Server
 export interface AuthContext {
   user?: TokenUser;
   req: Request;
 }
-
 // Get secret key from environment variables
 const secret = process.env.JWT_SECRET_KEY || 'default_secret_key';
 const expiration = '2h';

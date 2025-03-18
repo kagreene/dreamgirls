@@ -1,5 +1,5 @@
 import { GraphQLError } from 'graphql';
-import { AuthContext, TokenUser, auth } from '../utils/auth';
+import { AuthContext, TokenUser, auth } from '../utils/auth'; //TODO: resolve issue with imports TokenUser, auth 3.18.25 njw
 import { User, Review } from '../models';
 
 const resolvers = {
@@ -295,7 +295,7 @@ const resolvers = {
             }
             
             // Check if user is the comment author
-            //TODO: Address TypeScript error line 300 after completing data models - 3.18.25 njw
+            //TODO: Address TypeScript error line 300 after completing data models and create MongoDB cluster(?) - 3.18.25 njw
       const comment = review.comments?.find(
         (c) => c._id?.toString() === commentId
       );
