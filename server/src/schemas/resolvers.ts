@@ -4,6 +4,7 @@ import { User, Review } from '../models';
 
 const resolvers = {
     Query: {
+      //TODO: update/define auth.checkAuth with our own function
         //get logged in user
         me: async (_: any, __: any, context: AuthContext) => {
             const user = auth.checkAuth(context);
