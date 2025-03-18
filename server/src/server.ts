@@ -6,7 +6,7 @@ import { ApolloServerPluginDrainHttpServer } from '@apollo/server/plugin/drainHt
 import cors from 'cors';
 import path from 'path';
 import dotenv from 'dotenv';
-import { typeDefs, resolvers } from './schemas';
+import { typeDefs, resolvers } from './schemas'; //TODO: Resolve import issue 3.18.25 njw
 import db from './config/connection';
 import { authMiddleware } from './utils/auth';
 
@@ -35,13 +35,15 @@ const startApolloServer = async () => {
   app.use(express.urlencoded({ extended: true }));
   app.use(express.json());
   
-  // Apply Apollo middleware with CORS //TODO: fix issue
+  // Apply Apollo middleware with CORS //TODO: resolve issue with Apollo midddle 3.18.25 njw
   app.use(
     '/graphql',
     cors<cors.CorsRequest>(),
     express.json(),
     expressMiddleware(server, {
-      context: authMiddleware,
+      context: async ({ req }) => {
+        return authMiddleware({ req });
+      },
     })
   );
    
