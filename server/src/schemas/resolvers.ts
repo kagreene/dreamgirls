@@ -1,13 +1,76 @@
 import { GraphQLError } from 'graphql';
-import { AuthContext, TokenUser, auth } from '../utils/auth'; //TODO: resolve issue with imports TokenUser, auth 3.18.25 njw
+import { AuthContext, TokenUser, checkAuth, signToken } from '../utils/auth'; //TODO: resolve issue with imports TokenUser, auth 3.18.25 njw
 import { User, Review } from '../models';
+//TODO: Define interfaces for query and mutation arguments
+interface AddUserArgs {
+  input: {
+    username: string;
+    email: string;
+  }
+}
+
+interface UserArgs {
+  username: string;
+}
+
+interface ReviewArgs {
+  reviewId: string;
+}
+
+interface LoginArgs{
+  input: {
+    email: string;
+    username: string;
+  }
+}
+
+interface LocationInput {
+  type: string;
+  coordinates: number[];
+  address?: string; 
+}
+
+interface ReviewInput {
+  title: string;
+  description: string;
+  reviewType: string;
+  location: LocationInput;
+  severity: number;
+}
+
+interface AddReviewArgs {
+  input: {
+    reviewData: ReviewInput;
+  }
+}
+
+interface UpdateReviewArgs {
+  reviewId: string;
+  input: {
+    reviewData: ReviewInput
+  }
+}
+
+interface AddCommentArgs {
+  reviewId: string; 
+  input: {
+    commentText: string;
+  }
+}
+
+interface RemoveCommentArgs {
+  reviewId: string;
+  input: {
+    commentId: string;
+  }
+}
 
 const resolvers = {
     Query: {
       //TODO: update/define auth.checkAuth with our own function
         //get logged in user
         me: async (_: any, __: any, context: AuthContext) => {
-            const user = auth.checkAuth(context);
+            const user = checkAuth(context);
             return User.findOne({ _id: user._id }).populate('reviews');
         },
 
@@ -17,7 +80,7 @@ const resolvers = {
         },
 
         //get a user by username
-        user: async (_: any, { username }: { username: string }) => {
+        user: async (_: any, { username }: UserArgs) => {
             return User.findOne({ username }).populate('reviews');
         },
 
@@ -27,7 +90,7 @@ const resolvers = {
         },
 
         //get a single review by ID
-        review: async (_: any, { reviewId }: { reviewId: string }) => {
+        review: async (_: any, { reviewId }: ReviewArgs) => {
             return Review.findOne({ _id: reviewId })
               .populate('reviewedBy')
               .populate({
@@ -37,7 +100,7 @@ const resolvers = {
         },
 
         //get all reviews by a specific user
-        reviewsByUser: async (_: any, { username }: { username: string }) => {
+        reviewsByUser: async (_: any, { username }: UserArgs) => {
             const user = await User.findOne({ username });
             if (!user) {
                 throw new GraphQLError('User not found',  {
@@ -74,23 +137,24 @@ const resolvers = {
     Mutation: {
         //user authentication mutations
         addUser: async (
-            _: any,
-            { username, email, password }: { username: string, email: string, password: string }
+            _parent: any,
+            { input }: AddUserArgs
         ) =>  {
             //create user
-            const user = await User.create({ username, email, password });
+            const user = await User.create({...input});
             //sign a JWT
-            const token = auth.signToken(user);
+            const token = signToken(user.username, user.email, user.id);
             // Return an Auth object
             return { token, user };
          },
 
          login: async (
             _: any, 
-            { email, password }: { email: string, password: string }
+            { input }: LoginArgs
           ) => {
             // Find the user
-            const user = await User.findOne({ email });
+            const {username, email} = input;
+            const user = await User.findOne({username });
             if (!user) {
               throw new GraphQLError('No user found with this email address', {
                 extensions: { code: 'USER_NOT_FOUND' },
@@ -98,15 +162,15 @@ const resolvers = {
             }
             
             // Check password
-            const correctPw = await user.isPasswordValid(password);
-            if (!correctPw) {
-              throw new GraphQLError('Incorrect credentials', {
-                extensions: { code: 'INCORRECT_CREDENTIALS' },
-              });
-            }
+            // const correctPw = await user.isPasswordValid(password);
+            // if (!correctPw) {
+            //   throw new GraphQLError('Incorrect credentials', {
+            //     extensions: { code: 'INCORRECT_CREDENTIALS' },
+            //   });
+            // }
 
             //sign a JWT
-            const token = auth.signToken(user);
+            const token = signToken(user.username, user.email, user.id);
             // return an Auth object
             return { token, user };
         },
@@ -114,14 +178,14 @@ const resolvers = {
         //review mutations
         addReview: async (
             _: any,
-            { reviewData }: { reviewData: any }, 
+            { input }: AddReviewArgs, 
             context: AuthContext
         ) => {
-            const user = auth.checkAuth(context);
+            const user = checkAuth(context);
 
             // create the review
             const review = await Review.create({
-                ...reviewData,
+                ...input.reviewData,
                 reviewedBy: user._id,
             });    
 
@@ -137,10 +201,10 @@ const resolvers = {
 
         updateReview: async (
             _: any,
-            { reviewId, reviewData }: { reviewId: string, reviewData: any },
+            { reviewId, input }: UpdateReviewArgs,
             context: AuthContext
         ) => {
-            const user = auth.checkAuth(context);
+            const user = checkAuth(context);
 
             //find reviedw and check if user is the creator
             const review = await Review.findById(reviewId);
@@ -159,7 +223,7 @@ const resolvers = {
             //update the review
             const updatedReview = await Review.findByIdAndUpdate(
                 reviewId,
-                { ...reviewData },
+                { ...input.reviewData },
                 { new: true }
             ).populate('reviewedBy');
 
@@ -168,10 +232,10 @@ const resolvers = {
 
         removeReview: async (
             _: any,
-            { reviewId }: { reviewId: string },
+            { reviewId }: ReviewArgs,
             context: AuthContext
         ) => {
-            const user = auth.checkAuth(context);
+            const user = checkAuth(context);
 
             // find review and check if user is the creator
             const review = await Review.findById(reviewId);
@@ -201,10 +265,10 @@ const resolvers = {
 
         verifyReview: async (
             _: any,
-            { reviewId }: {reviewId: string },
+            { reviewId }: ReviewArgs,
             context: AuthContext
         ) => {
-            auth.checkAuth(context);
+            checkAuth(context);
 
             //NOTE: In a real app, we might want to add admin-only validation here
 
@@ -221,10 +285,10 @@ const resolvers = {
         // vote mutations
         upvoteReview: async (
             _: any,
-            { reviewId }: { reviewId: string },
+            { reviewId }: ReviewArgs,
             context: AuthContext
         ) => {
-            auth.checkAuth(context);
+            checkAuth(context);
 
             // increment upvotes
             const updatedReview = await Review.findByIdAndUpdate(
@@ -238,10 +302,10 @@ const resolvers = {
 
         downvoteReview: async (
             _: any,
-            { reviewId }: { reviewId: string },
+            { reviewId }: ReviewArgs,
             context: AuthContext
         ) => {
-            auth.checkAuth(context);
+            checkAuth(context);
 
             // increment downvotes
             const updatedReview = await Review.findByIdAndUpdate(
@@ -252,21 +316,21 @@ const resolvers = {
 
             return updatedReview;
         },
-
+// TO DO: FINISH UPDATING ARGUMENTS WITH INTERFACES
         // comment mutations
         addComment: async (
             _: any, 
-            { reviewId, commentText }: { reviewId: string, commentText: string }, 
+            { reviewId, input }: AddCommentArgs, 
             context: AuthContext
           ) => {
-            const user = auth.checkAuth(context);
+            const user = checkAuth(context);
             
             // Add comment to review
             const updatedReview = await Review.findByIdAndUpdate(
               reviewId,
               {
                 $push: {
-                  comments: { commentText, commentAuthor: user._id },
+                  comments: { commentText: input.commentText, commentAuthor: user._id },
                 },
               },
               { new: true }
@@ -282,10 +346,10 @@ const resolvers = {
           
           removeComment: async (
             _: any, 
-            { reviewId, commentId }: { reviewId: string, commentId: string }, 
+            { reviewId, input }: RemoveCommentArgs, 
             context: AuthContext
           ) => {
-            const user = auth.checkAuth(context);
+            const user = checkAuth(context);
             
             // Find the review
             const review = await Review.findById(reviewId);
@@ -298,7 +362,7 @@ const resolvers = {
             // Check if user is the comment author
             //TODO: Address TypeScript error line 300 after completing data models and create MongoDB cluster(?) - 3.18.25 njw
       const comment = review.comments?.find(
-        (c) => c._id?.toString() === commentId
+        (c) => c._id?.toString() === input.commentId
       );
       
       if (!comment) {
@@ -318,7 +382,7 @@ const resolvers = {
         reviewId,
         {
           $pull: {
-            comments: { _id: commentId },
+            comments: { _id: input.commentId },
           },
         },
         { new: true }

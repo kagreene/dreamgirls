@@ -16,6 +16,7 @@ interface IReview {
     downvotes: number;
     reviewedBy: Schema.Types.ObjectId;
     comments?: {
+        _id: string;
         commentText: string;
         commentAuthor: Schema.Types.ObjectId;
         createdAt: Date;
@@ -109,7 +110,7 @@ const reviewSchema = new Schema<IReview>(
 reviewSchema.index({ location: '2dsphere' });
 
 //virtual for calculating upvote/downvote ratio
-reviewSchema.virtual('voteRatio').get(function () {
+reviewSchema.virtual('voteRatio').get(function (this: IReview) {
     if (this.upvotes === 0 && this.downvotes === 0) return 0;
     return this.upvotes / (this.upvotes + this.downvotes);
 });
