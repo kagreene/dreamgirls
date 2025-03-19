@@ -4,7 +4,7 @@ const typeDefs = `#graphql
         _id: ID!
         username: String!
         email: String!
-        review: [Reviews]
+        reviews: [Review]
     }  
     
     type Auth {
@@ -33,7 +33,7 @@ const typeDefs = `#graphql
         severity: Int!
         verified: Boolean
         upvotes: Int
-        downvotes: INt
+        downvotes: Int
         voteRatio: Float
         reviewedBy: User!
         comments: [Comment]
@@ -42,6 +42,11 @@ const typeDefs = `#graphql
     }
         
     # Inputs
+    input UserInput {
+        username: String!
+        email: String!
+    }
+
     input LocationInput {
         type: String!
         coordinates: [Float]!
@@ -55,6 +60,10 @@ const typeDefs = `#graphql
         location: LocationInput!
         severity: Int!
     }
+    
+    input CommentInput {
+        commentText: String!
+    }
 
     # Queries
     type Query {
@@ -65,7 +74,7 @@ const typeDefs = `#graphql
         reviews: [Review]
         review(reviewId: ID!): Review}
         reviewsByUser(username: String!): [Review]
-        reviewsByLocation(longitude: Float!, latitude: Float!, distanceL Int = 5000): [Review]
+        reviewsByLocation(longitude: Float!, latitude: Float!, distance: Int = 5000): [Review]
     }
 
     # Mutations
@@ -75,7 +84,7 @@ const typeDefs = `#graphql
         addUser(username: String!, email: String!, password: String!): Auth
     
         # Review mutations
-        addReview(reviewData, ReviewInput!): Review
+        addReview(reviewData: ReviewInput!): Review
         updateReview(reviewId: ID!, reviewData: ReviewInput!): Review 
         removeReview(reviewId: ID!): Review
         verifyReview(reviewId: ID!): Review

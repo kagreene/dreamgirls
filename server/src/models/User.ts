@@ -1,4 +1,4 @@
-import { Schema, model} from 'mongoose';
+import { Schema, model } from 'mongoose';
 import bcrypt from 'bcrypt';
 
 //create interface representing a user document
@@ -42,7 +42,7 @@ const userSchema = new Schema<IUser>(
        toJSON: {
         virtuals: true,
         //don't include password in JSON responses
-        transform: (_doc, ret) => {
+        transform: (_doc: unknown, ret: Partial<IUser>) => {
             delete ret.password;
             return ret;
         },
