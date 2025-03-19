@@ -1,6 +1,6 @@
 import db from '../config/connection';
 import { User, Review } from '../models';
-import userData from './userData.json'; //TODO: verify routes for userData and reviewData njw
+import userData from './userData.json'; //fixed issue by adding "resolveJsonModule": true, to server tsconfig.json njw
 import reviewData from './reviewData.json'; // Changed from reportData.json
 
 //connect to database
