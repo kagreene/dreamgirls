@@ -103,7 +103,7 @@ const MapView: React.FC<MapViewProps> = ({
               <p>Reported: ${new Date(incident.createdAt).toLocaleDateString()}</p>
             `)
         )
-        .addTo(map.current);
+        .addTo(map.current!);
     });
   }, [incidents, loaded]);
 
