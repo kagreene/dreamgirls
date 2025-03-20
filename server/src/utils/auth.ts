@@ -61,4 +61,4 @@ const auth = {
   },
 };
 
-export { auth, AuthContext, TokenUser, authMiddleware };
+export { auth, AuthContext, TokenUser, authenticateToken };

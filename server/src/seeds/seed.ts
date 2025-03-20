@@ -12,9 +12,9 @@ db.once('open', async () => {
 
         // create users
         const users = await User.create(userData);
-
+        
         // create reviews and assign to random users
-        for (const review of reviewData) {
+        for (const review of Array.isArray(reviewData) ? reviewData : []) {  //changed to correct array error "reviewData" 3.19.25 njw
             const randomUserIndex = Math.floor(Math.random() * users.length);
             const user = users[randomUserIndex];
 
