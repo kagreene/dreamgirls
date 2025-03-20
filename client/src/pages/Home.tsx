@@ -4,29 +4,6 @@ import MapView from '../components/Map/MapView';
 import { useQuery } from '@apollo/client';
 import { gql } from 'graphql-tag';
 
-// GraphQL query to get all reviews
-const GET_REVIEWS = gql`
-  query GetReviews {
-    reviews {
-      _id
-      title
-      description
-      reviewType
-      location {
-        type
-        coordinates
-        address
-      }
-      severity
-      verified
-      reviewedBy {
-        username
-      }
-      createdAt
-    }
-  }
-`;
-
 const Home: React.FC = () => {
   const { loading, error, data } = useQuery(GET_REVIEWS);
   const [selectedLocation, setSelectedLocation] = useState<{
