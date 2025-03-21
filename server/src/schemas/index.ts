@@ -1,4 +1,4 @@
-import User from '../models/User';
-import Review from '../models/Review';
+import typeDefs from './typeDefs.js';
+import resolvers from './resolvers.js';
 
-export { User, Review };
+export { typeDefs, resolvers };

@@ -1,70 +1,47 @@
 import express from 'express';
-import http from 'http';
+import path from 'node:path';
+import type { Request, Response } from 'express';
+import db from './config/connection.js';
 import { ApolloServer } from '@apollo/server';
 import { expressMiddleware } from '@apollo/server/express4';
-import { ApolloServerPluginDrainHttpServer } from '@apollo/server/plugin/drainHttpServer';
-import cors from 'cors';
-import path from 'path';
+import { typeDefs, resolvers } from './schemas/index.js';
+import { authenticateToken } from './utils/auth.js';
 import dotenv from 'dotenv';
-import { typeDefs, resolvers } from './schemas'; //TODO: Resolve import issue 3.18.25 njw
-import db from './config/connection';
-import { authMiddleware } from './utils/auth';
+
 
 // Load environment variables
 dotenv.config();
 
-// Set port
-const PORT = process.env.PORT || 3001;
-
-// Create Express app and HTTP server
-const app = express();
-const httpServer = http.createServer(app);
-
-// Create Apollo server
 const server = new ApolloServer({
   typeDefs,
   resolvers,
-  plugins: [ApolloServerPluginDrainHttpServer({ httpServer })],
 });
 
-// Start Apollo server then apply middleware
 const startApolloServer = async () => {
   await server.start();
+  await db();
   
-  // Express middleware
-  app.use(express.urlencoded({ extended: true }));
+  const PORT = process.env.PORT || 3001;
+  const app = express();
+  
+  app.use(express.urlencoded({ extended: false }));
   app.use(express.json());
   
-  // Apply Apollo middleware with CORS //TODO: resolve issue with Apollo midddle 3.18.25 njw
-  app.use(
-    '/graphql',
-    cors<cors.CorsRequest>(),
-    express.json(),
-    expressMiddleware(server, {
-      context: async ({ req }) => {
-        return authMiddleware({ req });
-      },
-    })
-  );
-   
-  // Serve static assets in production
+  app.use('/graphql', expressMiddleware(server, {
+    context: authenticateToken
+  }) as any);
+  
   if (process.env.NODE_ENV === 'production') {
-    app.use(express.static(path.join(__dirname, '../../client/dist')));
-    
-    app.get('*', (req, res) => {
-      res.sendFile(path.join(__dirname, '../../client/dist/index.html'));
+    app.use(express.static(path.join(__dirname, '../client/dist')));
+    app.get('*', (_req: Request, res: Response) => {
+      res.sendFile(path.join(__dirname, '../client/dist/index.html'));
     });
   }
   
-  // MongoDB error handling
-  db.on('error', console.error.bind(console, 'MongoDB connection error:'));
-  
-  // Start server
-  await new Promise<void>((resolve) => httpServer.listen({ port: PORT }, resolve));
-  
-  console.log(`API server running on port ${PORT}!`);
-  console.log(`Use GraphQL at http://localhost:${PORT}/graphql`);
+  app.listen(PORT, () => {
+    console.log(`API server running on port ${PORT}!`);
+    console.log(`Use GraphQL at http://localhost:${PORT}/graphql`);
+  });
 };
 
-// Start the server
-startApolloServer().catch((err) => console.error(err));
+startApolloServer();

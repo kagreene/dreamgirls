@@ -13,6 +13,7 @@ node_modules/
 /build
 client/dist/
 client/build/
+server/dist/
 
 #logs //added logs 3.15.25 njw
 logs
