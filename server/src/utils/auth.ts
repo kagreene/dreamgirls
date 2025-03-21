@@ -23,8 +23,8 @@ const expiration = '2h';
 
 const auth = {
   // Function to sign token
-  signToken({ _id, username, email }: TokenUser): string {
-    const payload = { _id, username, email };
+  signToken( user : TokenUser): string {
+    const payload = { _id: user._id, username: user.username, email: user.email };
     return jwt.sign({ data: payload }, secret, { expiresIn: expiration });
   },
 
@@ -61,4 +61,4 @@ const auth = {
   },
 };
 
-export { auth, AuthContext, TokenUser, authenticateToken };
+export { auth, AuthContext, TokenUser };
