@@ -11,9 +11,9 @@ const client = new ApolloClient({
 
 import Header from "./components/Header";
 import Footer from "./components/Footer";
-import Map from "./components/Map";
-import Review from "./components/Review";
-import ReviewList from "./components/ReviewList";
+import Map from "./components/Map/MapView.js";
+import Review from "./components/Review/ReviewForm.js";
+import ReviewList from "./components/ReviewList/ReviewList";
 
 function App() {
   return (
@@ -22,7 +22,11 @@ function App() {
         <Header />
           <div className="main-content">
             <Map />
-            <Review />
+            <Review location={{
+             lng: -98.5795, 
+             lat: 39.8283, 
+            address: "Select a location on the map"
+          }} />
             <ReviewList />
           </div>
         {/* add the css styling */}

@@ -1,6 +1,23 @@
 import React, { useState } from 'react';
 import { useMutation } from '@apollo/client';
-import { ADD_REVIEW } from '../../api/reviewMutations';
+import { gql } from '@apollo/client';
+
+const ADD_REVIEW = gql`
+  mutation AddReview($reviewData: ReviewInput!) {
+    addReview(reviewData: $reviewData) {
+      id
+      title
+      description
+      reviewType
+      severity
+      location {
+        type
+        coordinates
+        address
+      }
+    }
+  }
+`;
 import './ReviewForm.css';
 
 // Incident type options
@@ -39,7 +56,7 @@ const ReviewForm: React.FC<ReviewFormProps> = ({ location, onSuccess, onCancel }
     severity: 3, // Default to neutral
   });
 
-  const [addReview, { loading, error }] = useMutation(ADD_REVIEW, {
+  const [addReview, { loading, error }] = useMutation<any>(ADD_REVIEW, {
     onCompleted: () => {
       if (onSuccess) onSuccess();
     },

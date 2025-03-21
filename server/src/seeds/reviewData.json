@@ -1,0 +1,72 @@
+[
+    {
+      "title": "Safe Walking Path",
+      "description": "Well-lit walking path with good visibility and regular foot traffic.",
+      "reviewType": "safe_environment",
+      "location": {
+        "type": "Point",
+        "coordinates": [-122.4194, 37.7749],
+        "address": "Golden Gate Park, San Francisco, CA"
+      },
+      "severity": 1,
+      "verified": false,
+      "upvotes": 15,
+      "downvotes": 2
+    },
+    {
+      "title": "Poor Street Lighting",
+      "description": "This area has minimal lighting after dark, making it difficult to navigate safely.",
+      "reviewType": "unsafe_environment",
+      "location": {
+        "type": "Point",
+        "coordinates": [-118.2437, 34.0522],
+        "address": "123 Example St, Los Angeles, CA"
+      },
+      "severity": 4,
+      "verified": true,
+      "upvotes": 27,
+      "downvotes": 3
+    },
+    {
+      "title": "Friendly Neighborhood",
+      "description": "Great community presence, neighbors look out for each other.",
+      "reviewType": "safe_environment",
+      "location": {
+        "type": "Point",
+        "coordinates": [-74.0060, 40.7128],
+        "address": "456 Community Blvd, New York, NY"
+      },
+      "severity": 1,
+      "verified": true,
+      "upvotes": 42,
+      "downvotes": 1
+    },
+    {
+      "title": "Isolated Area",
+      "description": "Very few people around, especially at night. Limited visibility.",
+      "reviewType": "unsafe_environment",
+      "location": {
+        "type": "Point",
+        "coordinates": [-87.6298, 41.8781],
+        "address": "789 Remote Lane, Chicago, IL"
+      },
+      "severity": 3,
+      "verified": false,
+      "upvotes": 8,
+      "downvotes": 2
+    },
+    {
+      "title": "Busy Intersection with Crossing Guards",
+      "description": "School crossing with attentive crossing guards during school hours.",
+      "reviewType": "safe_environment",
+      "location": {
+        "type": "Point",
+        "coordinates": [-77.0369, 38.9072],
+        "address": "School Street, Washington, DC"
+      },
+      "severity": 1,
+      "verified": true,
+      "upvotes": 31,
+      "downvotes": 0
+    }
+  ]

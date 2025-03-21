@@ -1,0 +1,108 @@
+.review-list {
+    width: 100%;
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+  }
+  
+  .review-list h2 {
+    text-align: center;
+    margin-bottom: 20px;
+    color: #333;
+  }
+  
+  .reviews-container {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+  
+  .review-card {
+    background-color: white;
+    border-radius: 8px;
+    padding: 16px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  .review-card h3 {
+    margin-top: 0;
+    color: #2a2a2a;
+  }
+  
+  .review-location {
+    font-style: italic;
+    color: #666;
+    margin-bottom: 10px;
+  }
+  
+  .review-description {
+    margin-bottom: 16px;
+  }
+  
+  .review-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    font-size: 0.85rem;
+  }
+  
+  .severity {
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-weight: bold;
+  }
+  
+  .severity-1 {
+    background-color: #d4edda;
+    color: #155724;
+  }
+  
+  .severity-2 {
+    background-color: #fff3cd;
+    color: #856404;
+  }
+  
+  .severity-3 {
+    background-color: #fff3cd;
+    color: #856404;
+  }
+  
+  .severity-4 {
+    background-color: #f8d7da;
+    color: #721c24;
+  }
+  
+  .severity-5 {
+    background-color: #f8d7da;
+    color: #721c24;
+  }
+  
+  .review-type {
+    color: #6c757d;
+  }
+  
+  .review-author {
+    font-weight: 500;
+  }
+  
+  .review-date {
+    color: #6c757d;
+  }
+  
+  .loading, .error {
+    text-align: center;
+    padding: 20px;
+    color: #6c757d;
+  }
+  
+  .error {
+    color: #721c24;
+    background-color: #f8d7da;
+    border-radius: 8px;
+  }
+  
+  .no-reviews {
+    text-align: center;
+    color: #6c757d;
+    font-style: italic;
+  }
