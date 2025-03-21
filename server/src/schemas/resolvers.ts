@@ -1,5 +1,5 @@
 import { GraphQLError } from 'graphql';
-import { AuthContext, TokenUser, checkAuth, signToken } from '../utils/auth'; //TODO: resolve issue with imports TokenUser, auth 3.18.25 njw
+import { AuthContext, auth } from '../utils/auth'; //TODO: resolve issue with imports TokenUser, auth 3.18.25 njw
 import { User, Review } from '../models';
 //TODO: Define interfaces for query and mutation arguments
 interface AddUserArgs {
@@ -70,7 +70,7 @@ const resolvers = {
       //TODO: update/define auth.checkAuth with our own function
         //get logged in user
         me: async (_: any, __: any, context: AuthContext) => {
-            const user = checkAuth(context);
+            const user = auth.checkAuth(context);
             return User.findOne({ _id: user._id }).populate('reviews');
         },
 
@@ -143,7 +143,7 @@ const resolvers = {
             //create user
             const user = await User.create({...input});
             //sign a JWT
-            const token = signToken(user.username, user.email, user.id);
+            const token = auth.signToken({_id: user.id, username: user.username, email: user.email});
             // Return an Auth object
             return { token, user };
          },
@@ -170,7 +170,7 @@ const resolvers = {
             // }
 
             //sign a JWT
-            const token = signToken(user.username, user.email, user.id);
+            const token = auth.signToken({_id: user.id, username: user.username, email: user.email});
             // return an Auth object
             return { token, user };
         },
@@ -181,7 +181,7 @@ const resolvers = {
             { input }: AddReviewArgs, 
             context: AuthContext
         ) => {
-            const user = checkAuth(context);
+            const user = auth.checkAuth(context);
 
             // create the review
             const review = await Review.create({
@@ -204,7 +204,7 @@ const resolvers = {
             { reviewId, input }: UpdateReviewArgs,
             context: AuthContext
         ) => {
-            const user = checkAuth(context);
+            const user = auth.checkAuth(context);
 
             //find reviedw and check if user is the creator
             const review = await Review.findById(reviewId);
@@ -235,7 +235,7 @@ const resolvers = {
             { reviewId }: ReviewArgs,
             context: AuthContext
         ) => {
-            const user = checkAuth(context);
+            const user = auth.checkAuth(context);
 
             // find review and check if user is the creator
             const review = await Review.findById(reviewId);
@@ -268,7 +268,7 @@ const resolvers = {
             { reviewId }: ReviewArgs,
             context: AuthContext
         ) => {
-            checkAuth(context);
+            auth.checkAuth(context);
 
             //NOTE: In a real app, we might want to add admin-only validation here
 
@@ -288,7 +288,7 @@ const resolvers = {
             { reviewId }: ReviewArgs,
             context: AuthContext
         ) => {
-            checkAuth(context);
+            auth.checkAuth(context);
 
             // increment upvotes
             const updatedReview = await Review.findByIdAndUpdate(
@@ -305,7 +305,7 @@ const resolvers = {
             { reviewId }: ReviewArgs,
             context: AuthContext
         ) => {
-            checkAuth(context);
+            auth.checkAuth(context);
 
             // increment downvotes
             const updatedReview = await Review.findByIdAndUpdate(
@@ -323,7 +323,7 @@ const resolvers = {
             { reviewId, input }: AddCommentArgs, 
             context: AuthContext
           ) => {
-            const user = checkAuth(context);
+            const user = auth.checkAuth(context);
             
             // Add comment to review
             const updatedReview = await Review.findByIdAndUpdate(
@@ -349,7 +349,7 @@ const resolvers = {
             { reviewId, input }: RemoveCommentArgs, 
             context: AuthContext
           ) => {
-            const user = checkAuth(context);
+            const user = auth.checkAuth(context);
             
             // Find the review
             const review = await Review.findById(reviewId);
