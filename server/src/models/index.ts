@@ -1,4 +1,4 @@
-import User from './User';
-import Review from './Review';
+import User from './User.js';
+import Review from './Review.js';
 
 export { User, Review };
