@@ -1,39 +1,51 @@
-//TODO: complete/replace the following basic "boilerplate" CSS
-import "./App.css";
-import { Outlet } from "react-router-dom";
-import { ApolloClient, ApolloProvider, InMemoryCache } from "@apollo/client";
+import React from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { ApiProvider } from './api/API';
+import { AuthProvider } from './context/AuthContext';
 
-const client = new ApolloClient({
-  uri: "/graphql",
-  cache: new InMemoryCache(),
-});
-// Import your page components here (create placeholder components for now)
+// Pages
+import Home from './pages/Home';
+import Login from './pages/Login';
+import Signup from './pages/Signup';
+import Profile from './pages/Profile';
+import AddReview from './pages/AddReview';
+import EditReview from './pages/EditReview';
+import ReviewDetail from './pages/ReviewDetail';
+import Map from './pages/Map';
+import NotFound from './pages/NotFound';
 
-import Header from "./components/Header";
-import Footer from "./components/Footer";
-import Map from "./components/Map/MapView.js";
-import Review from "./components/Review/ReviewForm.js";
-import ReviewList from "./components/ReviewList/ReviewList";
+// Components
+import Header from './components/Header';
+import Footer from './components/Footer';
 
-function App() {
+// Styles
+import './index.css';
+
+const App: React.FC = () => {
   return (
-    <ApolloProvider client={client}>
-      <div className="add-your-css-here">
-        <Header />
-          <div className="main-content">
-            <Map />
-            <Review location={{
-             lng: -98.5795, 
-             lat: 39.8283, 
-            address: "Select a location on the map"
-          }} />
-            <ReviewList />
+    <ApiProvider>
+      <AuthProvider>
+        <Router>
+          <div className="app">
+            <Header />
+            <main className="main">
+              <Routes>
+                <Route path="/" element={<Home />} />
+                <Route path="/login" element={<Login />} />
+                <Route path="/signup" element={<Signup />} />
+                <Route path="/profile" element={<Profile />} />
+                <Route path="/map" element={<Map />} />
+                <Route path="/add-review" element={<AddReview />} />
+                <Route path="/edit-review/:reviewId" element={<EditReview />} />
+                <Route path="/review/:reviewId" element={<ReviewDetail />} />
+                <Route path="*" element={<NotFound />} />
+              </Routes>
+            </main>
+            <Footer />
           </div>
-        {/* add the css styling */}
-        <Outlet />
-        <Footer />
-      </div>
-    </ApolloProvider>
+        </Router>
+      </AuthProvider>
+    </ApiProvider>
   );
 };
 

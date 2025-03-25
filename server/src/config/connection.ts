@@ -4,6 +4,7 @@ import mongoose from 'mongoose';
 dotenv.config();
 
 const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/safespotter';
+// const MONGODB_URI = 'mongodb://127.0.0.1:27017/safespotter';
 
 const db = async (): Promise<typeof mongoose.connection> => {
   try {

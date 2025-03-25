@@ -1,12 +1,22 @@
 [
     {
-      "username": "safetyuser1",
-      "email": "user1@example.com",
+      "username": "safetyFirst",
+      "email": "safety@example.com",
       "password": "password12345"
     },
     {
-        "username": "safetyuser2",
-        "email": "user2@example.com",
-        "password": "password67890"
-      }
-    ]
+      "username": "safetyExplorer",
+      "email": "explorer@example.com",
+      "password": "password12345"
+    },
+    {
+      "username": "communitySafety",
+      "email": "community@example.com", 
+      "password": "password12345"
+    },
+    {
+      "username": "safetyAdvocate",
+      "email": "advocate@example.com",
+      "password": "password12345"
+    }
+  ]
