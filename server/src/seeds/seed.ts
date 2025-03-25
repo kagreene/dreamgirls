@@ -1,40 +1,45 @@
-import db from '../config/connection';
-import { User, Review } from '../models';
-import userData from './userData.json'; //fixed issue by adding "resolveJsonModule": true, to server tsconfig.json njw
-import reviewData from './reviewData.json'; // Changed from reportData.json
+import db from '../config/connection.js';
+import { Review, User } from '../models/index.js';
+import cleanDB from './cleanDB.js';
 
-//connect to database
-db.once('open', async () => {
-    try {
-        // clear existing data
-        await Review.deleteMany({});
-        await User.deleteMany({});
+import userData from './userData.json' with { type: 'json' };
+import reviewData from './reviewData.json' with { type: 'json' };
 
-        // create users
-        const users = await User.create(userData);
-        
-        // create reviews and assign to random users
-        for (const review of Array.isArray(reviewData) ? reviewData : []) {  //changed to correct array error "reviewData" 3.19.25 njw
-            const randomUserIndex = Math.floor(Math.random() * users.length);
-            const user = users[randomUserIndex];
-
-            const createdReview = await Review.create({
-                ...review,
-                reviewedBy: user._id,
-            });
-
-            // add review to user's reviews
-            await User.findByIdAndUpdate(
-                user._id,
-                { $push: { reviews: createdReview._id } },
-                { new: true }
-            );
-        }
-
-        console.log('Seed data inserted!');
-        process.exit(0);
-    } catch (err) {
-        console.error(err);
-        process.exit(1);
+const seedDatabase = async (): Promise<void> => {
+  try {
+    await db();
+    await cleanDB();
+    
+    // Create users
+    const users = await User.create(userData);
+    console.log('Users seeded successfully!');
+    
+    // Prepare review data with user references
+    const reviewsWithUsers = reviewData.map((review, index) => ({
+      ...review,
+      author: users[index % users.length]._id
+    }));
+    
+    // Create reviews
+    await Review.insertMany(reviewsWithUsers);
+    console.log('Reviews seeded successfully!');
+    
+    // Update users with their reviews
+    for (const user of users) {
+      const userReviews = await Review.find({ author: user._id });
+      await User.findByIdAndUpdate(
+        user._id,
+        { $push: { reviews: { $each: userReviews.map(review => review._id) } } }
+      );
     }
-});
+    console.log('User-review relationships seeded successfully!');
+    
+    console.log('Seeding completed successfully!');
+    process.exit(0);
+  } catch (error) {
+    console.error('Error seeding database:', error);
+    process.exit(1);
+  }
+};
+
+seedDatabase();

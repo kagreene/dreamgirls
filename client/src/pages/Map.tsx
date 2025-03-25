@@ -5,11 +5,9 @@ import { useAuth } from '../context/AuthContext';
 import { useQuery } from '@apollo/client';
 import { GET_REVIEWS } from '../api/reviewQueries';
 
-const Home: React.FC = () => {
+const Map: React.FC = () => {
   const { isLoggedIn } = useAuth();
-  const { data, loading } = useQuery(GET_REVIEWS, {
-    fetchPolicy: 'cache-and-network',
-  });
+  const { data, loading, error } = useQuery(GET_REVIEWS);
   const [selectedLocation, setSelectedLocation] = useState<{
     lng: number;
     lat: number;
@@ -25,34 +23,16 @@ const Home: React.FC = () => {
   };
 
   return (
-    <div className="page home-page">
-      <div className="hero">
-        <div className="container">
-          <h1>Navigate with Confidence</h1>
-          <p className="lead">
-            Safe Spotter helps you stay informed about safety concerns in your area
-            and contribute to keeping your community safe.
+    <div className="page map-page">
+      <div className="container">
+        <div className="map-page-header">
+          <h1>Safety Map</h1>
+          <p className="map-instructions">
+            Explore safety reviews in your area. Click on markers to view details or select a location to add your own review.
           </p>
-          {!isLoggedIn && (
-            <div className="cta-buttons">
-              <Link to="/signup" className="btn btn-primary">
-                Sign Up Now
-              </Link>
-              <Link to="/login" className="btn btn-secondary">
-                Log In
-              </Link>
-            </div>
-          )}
         </div>
-      </div>
 
-      <div className="container main-content">
-        <div className="map-section">
-          <h2>Explore Safety Reviews</h2>
-          <p>
-            Click on the map to see safety reviews or search for a specific
-            location.
-          </p>
+        <div className="map-container">
           <MapView onLocationSelect={handleLocationSelect} />
           
           {selectedLocation && (
@@ -75,14 +55,16 @@ const Home: React.FC = () => {
           )}
         </div>
 
-        <div className="recent-reviews">
-          <h2>Recent Safety Reviews</h2>
+        <div className="map-sidebar">
+          <h2>Recent Reviews</h2>
           {loading ? (
-            <p>Loading recent reviews...</p>
+            <p>Loading reviews...</p>
+          ) : error ? (
+            <p className="error">Error loading reviews: {error.message}</p>
           ) : data && data.reviews && data.reviews.length > 0 ? (
             <div className="reviews-list">
-              {data.reviews.slice(0, 5).map((review: any) => (
-                <div key={review._id} className="review-card">
+              {data.reviews.slice(0, 10).map((review: any) => (
+                <div key={review._id} className="review-mini-card">
                   <h3>{review.title}</h3>
                   <p className="review-address">{review.location.address}</p>
                   <div className="review-meta">
@@ -93,10 +75,6 @@ const Home: React.FC = () => {
                       Safety Rating: {review.severity}/5
                     </span>
                   </div>
-                  <p className="review-excerpt">
-                    {review.description.slice(0, 100)}
-                    {review.description.length > 100 ? '...' : ''}
-                  </p>
                   <Link to={`/review/${review._id}`} className="btn btn-text">
                     View Details
                   </Link>
@@ -104,15 +82,12 @@ const Home: React.FC = () => {
               ))}
             </div>
           ) : (
-            <p>No reviews have been posted yet. Be the first to add a safety review!</p>
+            <p>No reviews have been posted yet.</p>
           )}
-          <Link to="/map" className="btn btn-secondary view-all-btn">
-            View All Reviews
-          </Link>
         </div>
       </div>
     </div>
   );
 };
 
-export default Home;
+export default Map;

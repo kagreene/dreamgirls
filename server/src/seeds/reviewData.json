@@ -1,72 +1,90 @@
 [
     {
-      "title": "Safe Walking Path",
-      "description": "Well-lit walking path with good visibility and regular foot traffic.",
-      "reviewType": "safe_environment",
+      "title": "Dark street at night",
+      "description": "This street has very poor lighting at night. It's difficult to see and feels unsafe when walking alone.",
+      "reviewType": "unsafe_environment",
+      "severity": 2,
       "location": {
-        "type": "Point",
-        "coordinates": [-122.4194, 37.7749],
-        "address": "Golden Gate Park, San Francisco, CA"
-      },
-      "severity": 1,
-      "verified": false,
-      "upvotes": 15,
-      "downvotes": 2
+        "type": "Point", 
+        "coordinates": [-97.7431, 30.2672],
+        "address": "100 Congress Ave, Austin, TX 78701"
+      }
     },
     {
-      "title": "Poor Street Lighting",
-      "description": "This area has minimal lighting after dark, making it difficult to navigate safely.",
-      "reviewType": "unsafe_environment",
+      "title": "Well-lit park area",
+      "description": "This park has excellent lighting and security cameras. Feels very safe even in the evening.",
+      "reviewType": "other",
+      "severity": 5,
       "location": {
         "type": "Point",
-        "coordinates": [-118.2437, 34.0522],
-        "address": "123 Example St, Los Angeles, CA"
-      },
+        "coordinates": [-97.7500, 30.2750],
+        "address": "Zilker Park, Austin, TX 78746"
+      }
+    },
+    {
+      "title": "Witnessed theft at corner store",
+      "description": "I saw someone shoplifting from this corner store. The staff seemed to be aware but powerless to stop it. Be cautious with your belongings.",
+      "reviewType": "theft",
+      "severity": 2,
+      "location": {
+        "type": "Point",
+        "coordinates": [-97.7300, 30.2600],
+        "address": "500 E 7th St, Austin, TX 78701"
+      }
+    },
+    {
+      "title": "Friendly neighborhood",
+      "description": "This area is very community-oriented with neighbors looking out for each other. I always feel safe walking here.",
+      "reviewType": "other",
+      "severity": 5,
+      "location": {
+        "type": "Point",
+        "coordinates": [-97.7600, 30.2900],
+        "address": "1000 W 6th St, Austin, TX 78703"
+      }
+    },
+    {
+      "title": "Verbal harassment incident",
+      "description": "I was verbally harassed by someone at this location. There weren't many people around to help at the time.",
+      "reviewType": "harassment",
+      "severity": 2,
+      "location": {
+        "type": "Point",
+        "coordinates": [-97.7350, 30.2630],
+        "address": "600 Congress Ave, Austin, TX 78701"
+      }
+    },
+    {
+      "title": "Secure shopping area",
+      "description": "This shopping center has visible security personnel and feels very secure. Well-lit parking lots too.",
+      "reviewType": "other",
       "severity": 4,
-      "verified": true,
-      "upvotes": 27,
-      "downvotes": 3
-    },
-    {
-      "title": "Friendly Neighborhood",
-      "description": "Great community presence, neighbors look out for each other.",
-      "reviewType": "safe_environment",
       "location": {
         "type": "Point",
-        "coordinates": [-74.0060, 40.7128],
-        "address": "456 Community Blvd, New York, NY"
-      },
-      "severity": 1,
-      "verified": true,
-      "upvotes": 42,
-      "downvotes": 1
+        "coordinates": [-97.7439, 30.3080],
+        "address": "The Domain, Austin, TX 78758"
+      }
     },
     {
-      "title": "Isolated Area",
-      "description": "Very few people around, especially at night. Limited visibility.",
+      "title": "Poorly maintained area",
+      "description": "This area has a lot of abandoned buildings and broken windows. It doesn't feel safe, especially after dark.",
       "reviewType": "unsafe_environment",
+      "severity": 1,
       "location": {
         "type": "Point",
-        "coordinates": [-87.6298, 41.8781],
-        "address": "789 Remote Lane, Chicago, IL"
-      },
-      "severity": 3,
-      "verified": false,
-      "upvotes": 8,
-      "downvotes": 2
+        "coordinates": [-97.7200, 30.2550],
+        "address": "800 E 12th St, Austin, TX 78702"
+      }
     },
     {
-      "title": "Busy Intersection with Crossing Guards",
-      "description": "School crossing with attentive crossing guards during school hours.",
-      "reviewType": "safe_environment",
+      "title": "Late-night safety concern",
+      "description": "A lot of intoxicated people gather here late at night. Can be intimidating if you're alone.",
+      "reviewType": "unsafe_environment",
+      "severity": 3,
       "location": {
         "type": "Point",
-        "coordinates": [-77.0369, 38.9072],
-        "address": "School Street, Washington, DC"
-      },
-      "severity": 1,
-      "verified": true,
-      "upvotes": 31,
-      "downvotes": 0
+        "coordinates": [-97.7400, 30.2690],
+        "address": "Dirty 6th, Austin, TX 78701"
+      }
     }
   ]

@@ -1,23 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useMutation } from '@apollo/client';
-import { gql } from '@apollo/client';
-
-const ADD_REVIEW = gql`
-  mutation AddReview($reviewData: ReviewInput!) {
-    addReview(reviewData: $reviewData) {
-      id
-      title
-      description
-      reviewType
-      severity
-      location {
-        type
-        coordinates
-        address
-      }
-    }
-  }
-`;
+import { ADD_REVIEW, UPDATE_REVIEW } from '../../api/reviewMutations';
 import './ReviewForm.css';
 
 // Incident type options
@@ -26,6 +9,7 @@ const REVIEW_TYPES = [
   { value: 'theft', label: 'Theft' },
   { value: 'assault', label: 'Assault' },
   { value: 'unsafe_environment', label: 'Unsafe Environment' },
+  { value: 'safe_environment', label: 'Safe Environment' },
   { value: 'other', label: 'Other' },
 ];
 
@@ -44,11 +28,12 @@ interface ReviewFormProps {
     lat: number;
     address: string;
   };
+  review?: any; // Optional existing review for editing
   onSuccess?: () => void;
   onCancel?: () => void;
 }
 
-const ReviewForm: React.FC<ReviewFormProps> = ({ location, onSuccess, onCancel }) => {
+const ReviewForm: React.FC<ReviewFormProps> = ({ location, review, onSuccess, onCancel }) => {
   const [formData, setFormData] = useState({
     title: '',
     description: '',
@@ -56,7 +41,26 @@ const ReviewForm: React.FC<ReviewFormProps> = ({ location, onSuccess, onCancel }
     severity: 3, // Default to neutral
   });
 
-  const [addReview, { loading, error }] = useMutation<any>(ADD_REVIEW, {
+  // Initialize form with existing review data if provided
+  useEffect(() => {
+    if (review) {
+      setFormData({
+        title: review.title || '',
+        description: review.description || '',
+        reviewType: review.reviewType || REVIEW_TYPES[0].value,
+        severity: review.severity || 3,
+      });
+    }
+  }, [review]);
+
+  // Use the appropriate mutation based on whether we're editing or creating
+  const [addReview, { loading: addLoading, error: addError }] = useMutation(ADD_REVIEW, {
+    onCompleted: () => {
+      if (onSuccess) onSuccess();
+    },
+  });
+
+  const [updateReview, { loading: updateLoading, error: updateError }] = useMutation(UPDATE_REVIEW, {
     onCompleted: () => {
       if (onSuccess) onSuccess();
     },
@@ -74,29 +78,53 @@ const ReviewForm: React.FC<ReviewFormProps> = ({ location, onSuccess, onCancel }
     e.preventDefault();
     
     try {
-      await addReview({
-        variables: {
-          reviewData: {
-            title: formData.title,
-            description: formData.description,
-            reviewType: formData.reviewType,
-            severity: formData.severity,
-            location: {
-              type: 'Point',
-              coordinates: [location.lng, location.lat],
-              address: location.address,
+      if (review) {
+        // Update existing review
+        await updateReview({
+          variables: {
+            reviewId: review._id,
+            reviewData: {
+              title: formData.title,
+              description: formData.description,
+              reviewType: formData.reviewType,
+              severity: formData.severity,
+              location: {
+                type: 'Point',
+                coordinates: [location.lng, location.lat],
+                address: location.address,
+              },
             },
           },
-        },
-      });
+        });
+      } else {
+        // Add new review
+        await addReview({
+          variables: {
+            reviewData: {
+              title: formData.title,
+              description: formData.description,
+              reviewType: formData.reviewType,
+              severity: formData.severity,
+              location: {
+                type: 'Point',
+                coordinates: [location.lng, location.lat],
+                address: location.address,
+              },
+            },
+          },
+        });
+      }
     } catch (err) {
       console.error('Error submitting review:', err);
     }
   };
 
+  const loading = addLoading || updateLoading;
+  const error = addError || updateError;
+
   return (
     <div className="review-form-wrapper">
-      <h2>Submit a Safety Review</h2>
+      <h2>{review ? 'Edit Safety Review' : 'Submit a Safety Review'}</h2>
       <p className="location-address">Location: {location.address}</p>
       
       <form onSubmit={handleSubmit} className="review-form">
@@ -173,7 +201,7 @@ const ReviewForm: React.FC<ReviewFormProps> = ({ location, onSuccess, onCancel }
             Cancel
           </button>
           <button type="submit" disabled={loading} className="submit-button">
-            {loading ? 'Submitting...' : 'Submit Review'}
+            {loading ? 'Submitting...' : review ? 'Update Review' : 'Submit Review'}
           </button>
         </div>
       </form>

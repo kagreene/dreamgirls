@@ -1,102 +1,66 @@
-const typeDefs = `#graphql
-    # Types
-    type User {
-        _id: ID!
-        username: String!
-        email: String!
-        reviews: [Review]
-    }  
-    
-    type Auth {
-        token: ID!
-        user: User
-    }
-    
-    type Comment {
-        _id: ID
-        commentText: String
-        commentAuthor: User
-        createdAt: String
-    }
-    
-    type Location {
-        type: String!
-        coordinates: [Float]!
-        address: String
-    }
-    
-    type Review {
-        _id: String!
-        description: String!
-        reviewType: String!
-        location: Location!
-        severity: Int!
-        verified: Boolean
-        upvotes: Int
-        downvotes: Int
-        voteRatio: Float
-        reviewedBy: User!
-        comments: [Comment]
-        createdAt: String
-        updatedAt: String
-    }
-        
-    # Inputs
-    input UserInput {
-        username: String!
-        email: String!
-    }
+import { gql } from 'graphql-tag';
 
-    input LocationInput {
-        type: String!
-        coordinates: [Float]!
-        address: String
-    }
-    
-    input ReviewInput {
-        title: String!
-        description: String!
-        reviewType: String!
-        location: LocationInput!
-        severity: Int!
-    }
-    
-    input CommentInput {
-        commentText: String!
-    }
+const typeDefs = gql`
+  type User {
+    _id: ID
+    username: String
+    email: String
+    reviews: [Review]
+  }
 
-    # Queries
-    type Query {
-        me: User
-        users: [User]
-        user(username: String!): User
-        
-        reviews: [Review]
-        review(reviewId: ID!): Review}
-        reviewsByUser(username: String!): [Review]
-        reviewsByLocation(longitude: Float!, latitude: Float!, distance: Int = 5000): [Review]
-    }
+  type Point {
+    type: String
+    coordinates: [Float]
+    address: String
+  }
 
-    # Mutations
-    type Mutation {
-        # Auth mutations
-        login(email: String!, password: String!): Auth
-        addUser(username: String!, email: String!, password: String!): Auth
-    
-        # Review mutations
-        addReview(reviewData: ReviewInput!): Review
-        updateReview(reviewId: ID!, reviewData: ReviewInput!): Review 
-        removeReview(reviewId: ID!): Review
-        verifyReview(reviewId: ID!): Review
-   
-        # Vote mutations
-        upvoteReview(reviewId: ID!): Review
-        downvoteReview(reviewId: ID!): Review
-   
-        # Comment mutations
-        addComment(reviewId: ID!, commentText: String!): Review
-        removeComment(reviewId: ID!, commentId: ID!): Review
-    }
+  type Review {
+    _id: ID
+    title: String
+    description: String
+    reviewType: String
+    severity: Int
+    location: Point
+    author: User
+    createdAt: String
+  }
+
+  type Auth {
+    token: String
+    user: User
+  }
+
+  input PointInput {
+    type: String
+    coordinates: [Float]
+    address: String
+  }
+
+  input ReviewInput {
+    title: String!
+    description: String!
+    reviewType: String!
+    severity: Int!
+    location: PointInput!
+  }
+
+  type Query {
+    me: User
+    users: [User]
+    user(username: String!): User
+    reviews: [Review]
+    reviewsByLocation(lng: Float!, lat: Float!, distance: Int): [Review]
+    reviewsByAddress(address: String!): [Review]
+    review(reviewId: ID!): Review
+  }
+
+  type Mutation {
+    addUser(username: String!, email: String!, password: String!): Auth
+    login(email: String!, password: String!): Auth
+    addReview(reviewData: ReviewInput!): Review
+    updateReview(reviewId: ID!, reviewData: ReviewInput!): Review
+    removeReview(reviewId: ID!): Review
+  }
 `;
 
 export default typeDefs;
