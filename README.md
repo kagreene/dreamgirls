@@ -1,4 +1,4 @@
-# Safe Spotter 🛡️  TEST
+# Safe Spotter 🛡️ 
 A MERN stack application that allows users to report and view safety concerns in their area.
 
 ![MIT](https://img.shields.io/badge/License-MIT-blue)
@@ -14,9 +14,9 @@ Safe Spotter is a community-driven platform where users can share safety reviews
 
 ## Screenshots
 
-![app_image](/client/assets)
-![app_image](/client/assets/)
-![app_image](/client/assets/)
+![app_image](/client/assets/image1.png)
+![app_image](/client/assets/image2.png)
+![app_image](/client/assets/image3.png)
 
 ## Table of Contents:
 - [Installation](#installation)
