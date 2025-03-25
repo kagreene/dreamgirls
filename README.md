@@ -9,8 +9,8 @@ A MERN stack application that allows users to report and view safety concerns in
 Safe Spotter is a community-driven platform where users can share safety reviews for locations they've visited or experienced safety concerns. The application uses real-time mapping to visualize safety data and helps users make informed decisions about the places they visit.
 
 ## Website Links: 
-- [GitHub-website](https://github.com/noIDEA-tech/20-CI-CD-GitHub-Actions)
-- [Deployed-website](https://two0-ci-cd-github-actions.onrender.com)
+- [GitHub-website](https://github.com/kagreene/dreamgirls)
+- [Deployed-website](https://dreamgirls.onrender.com) 
 
 <!-- This application is deployed on Render and can be accessed at [safe-spotter.onrender.com](https://safe-spotter.onrender.com). -->
 
