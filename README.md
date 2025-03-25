@@ -12,10 +12,8 @@ Safe Spotter is a community-driven platform where users can share safety reviews
 - [GitHub-website](https://github.com/kagreene/dreamgirls)
 - [Deployed-website](https://dreamgirls.onrender.com) 
 
-<!-- This application is deployed on Render and can be accessed at [safe-spotter.onrender.com](https://safe-spotter.onrender.com). -->
-
 ## Screenshots
-<!-- TODO: import screenshots of browser -->
+
 ![app_image](/client/assets)
 ![app_image](/client/assets/)
 ![app_image](/client/assets/)
