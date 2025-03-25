@@ -35,11 +35,11 @@ const Home: React.FC = () => {
           </p>
           {!isLoggedIn && (
             <div className="cta-buttons">
-              <Link to="/signup" className="btn btn-primary">
-                Sign Up Now
+              <Link to="/signup" className="btn btn-primary me-2">
+                Sign Up Now  
               </Link>
               <Link to="/login" className="btn btn-secondary">
-                Log In
+                    Log In
               </Link>
             </div>
           )}
