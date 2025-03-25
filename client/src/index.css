@@ -27,7 +27,7 @@
       Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
     line-height: 1.6;
     color: var(--color-text);
-    background-color: var(--color-light);
+    background-color: #D3D9D4;
   }
   
   .app {
