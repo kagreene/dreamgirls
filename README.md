@@ -1,4 +1,4 @@
-# Safe Spotter 🛡️
+# Safe Spotter 🛡️  TEST
 A MERN stack application that allows users to report and view safety concerns in their area.
 
 ![MIT](https://img.shields.io/badge/License-MIT-blue)
