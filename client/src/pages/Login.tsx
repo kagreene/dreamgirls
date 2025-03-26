@@ -3,6 +3,7 @@ import { useMutation } from '@apollo/client';
 import { LOGIN } from '../api/reviewMutations';
 import { Link, Navigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import './Login.css';
 
 const Login: React.FC = () => {
   const [formState, setFormState] = useState({ email: '', password: '' });

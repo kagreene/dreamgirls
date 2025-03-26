@@ -38,6 +38,7 @@
   
   .main {
     flex: 1;
+    padding: 0.5rem;
   }
   
   .container {
@@ -47,5 +48,24 @@
     padding: 0 1rem;
   }
   
-  /* Typography */
-  h1, h2, h3, h4, h5
+  .btn-text {
+    color: #124E66;
+  }
+
+  .review-card {
+    background: #748D92;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 15px;
+    margin: 10px 0;
+    border: 1px 
+  }
+
+  .review-mini-card {
+    background: #748D92;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 15px;
+    margin: 10px 0;
+    border: 1px 
+  }
