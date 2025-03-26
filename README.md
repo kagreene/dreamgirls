@@ -1,5 +1,5 @@
-# Safe Spotter 🛡️  TEST
-A MERN stack application that allows users to report and view safety concerns in their area.
+# Safe Spotter 🛡️ 
+A MERN stack single page application that allows users to report and view safety concerns in their area.
 
 ![MIT](https://img.shields.io/badge/License-MIT-blue)
 
@@ -9,16 +9,14 @@ A MERN stack application that allows users to report and view safety concerns in
 Safe Spotter is a community-driven platform where users can share safety reviews for locations they've visited or experienced safety concerns. The application uses real-time mapping to visualize safety data and helps users make informed decisions about the places they visit.
 
 ## Website Links: 
-- [GitHub-website](https://github.com/noIDEA-tech/20-CI-CD-GitHub-Actions)
-- [Deployed-website](https://two0-ci-cd-github-actions.onrender.com)
-
-<!-- This application is deployed on Render and can be accessed at [safe-spotter.onrender.com](https://safe-spotter.onrender.com). -->
+- [GitHub-website](https://github.com/kagreene/dreamgirls)
+- [Deployed-website](https://dreamgirls.onrender.com) 
 
 ## Screenshots
-<!-- TODO: import screenshots of browser -->
-![app_image](/client/assets)
-![app_image](/client/assets/)
-![app_image](/client/assets/)
+
+![app_image](/client/assets/image1.png)
+![app_image](/client/assets/image2.png)
+![app_image](/client/assets/image3.png)
 
 ## Table of Contents:
 - [Installation](#installation)
