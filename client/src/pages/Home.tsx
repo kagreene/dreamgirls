@@ -4,6 +4,9 @@ import MapView from '../components/Map/MapView';
 import { useAuth } from '../context/AuthContext';
 import { useQuery } from '@apollo/client';
 import { GET_REVIEWS } from '../api/reviewQueries';
+import './Home.css';
+
+
 
 const Home: React.FC = () => {
   const { isLoggedIn } = useAuth();

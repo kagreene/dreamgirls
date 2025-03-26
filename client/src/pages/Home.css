@@ -1,0 +1,29 @@
+.cta-buttons {
+    display: flex;
+    gap: 10px;
+  }
+
+.cta-buttons .btn {
+    padding: 5px 8px;
+    border-radius: 8px;
+    background-color: #124E66;
+    color: #D3D9D4;
+    text-decoration: none;
+    font-size: 16px;
+    box-sizing: border-box;
+    margin: 5px;
+
+}
+
+.cta-buttons .btn:hover {
+    background-color: #0F3A4F;
+    color: #D3D9D4;
+}
+
+.btn-secondary {
+    padding: 8px 8px;
+    border-radius: 8px;
+    background-color: #124E66;
+    color: #D3D9D4;
+    text-decoration: none;
+}
